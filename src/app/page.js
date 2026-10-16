@@ -949,7 +949,7 @@ export default function PlayHubHome() {
                 Handshake Passcode Fee
               </p>
               <h2 className="text-3xl font-black text-white mt-1 flex items-center justify-center gap-1">
-                TSHS 20,000/=
+                
                 <span className="text-xs font-semibold text-[#888] uppercase tracking-normal"></span>
               </h2>
             </div>
