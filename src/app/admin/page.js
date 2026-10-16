@@ -290,7 +290,7 @@ export default function AdminDashboard() {
       <div className="flex min-h-screen items-center justify-center bg-[#0a0f0d] text-[#e2e8f0] px-4 font-sans antialiased">
         <div className="w-full max-w-[380px] rounded-3xl border border-[#222c26] bg-[#111613] p-7 shadow-2xl space-y-6">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-[#ff3b3b]/10 border border-[#ff3b3b]/20 flex items-center justify-center text-[#ff3b3b]">
+            <div className="h-9 w-9 rounded-xl bg-[#3b82f6]/10 border border-[#3b82f6]/20 flex items-center justify-center text-[#3b82f6]">
               <ShieldAlert size={18} />
             </div>
             <div>
@@ -301,10 +301,10 @@ export default function AdminDashboard() {
           <form onSubmit={(e) => { e.preventDefault(); if (passcode === KEY) { window.sessionStorage.setItem('playhub_admin_auth', 'verified'); setIsAuthenticated(true); } else { setAuthError('Incorrect system authorization passcode.'); } }} className="space-y-4">
             <div className="space-y-1.5">
               <label className="block text-[10px] uppercase font-bold tracking-widest text-[#666]">Security Token</label>
-              <input type="password" placeholder="••••••••" value={passcode} onChange={(e) => setPasscode(e.target.value)} className="w-full bg-[#161d19] border border-[#26332d] rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-[#ff3b3b] transition-all" />
+              <input type="password" placeholder="••••••••" value={passcode} onChange={(e) => setPasscode(e.target.value)} className="w-full bg-[#161d19] border border-[#26332d] rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-[#3b82f6] transition-all" />
             </div>
-            {authError && <p className="text-[#ff5f5f] text-xs font-semibold tracking-tight">{authError}</p>}
-            <button type="submit" className="w-full bg-gradient-to-r from-[#ff3b3b] to-[#ff5f5f] text-white font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-[#ff3b3b]/10 hover:shadow-[#ff3b3b]/20 cursor-pointer transform active:scale-[0.99] transition-all">Verify Credentials</button>
+            {authError && <p className="text-[#7fb2ff] text-xs font-semibold tracking-tight">{authError}</p>}
+            <button type="submit" className="w-full bg-gradient-to-r from-[#3b82f6] to-[#7fb2ff] text-white font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-[#3b82f6]/10 hover:shadow-[#3b82f6]/20 cursor-pointer transform active:scale-[0.99] transition-all">Verify Credentials</button>
           </form>
         </div>
       </div>
@@ -312,17 +312,30 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070908] text-[#e2e8f0] font-sans antialiased selection:bg-[#ff3b3b]/20">
+    <div className="min-h-screen bg-[#070908] text-[#e2e8f0] font-sans antialiased selection:bg-[#3b82f6]/20">
       {/* CONTROL ROOM TOP BANNER HEADER */}
       <nav className="sticky top-0 z-40 flex items-center justify-between border-b border-[#1c2420] bg-[#070908]/90 backdrop-blur-md px-6 py-3.5">
         <div className="flex items-center gap-2.5 shrink-0">
-          <div className="relative h-5 w-8 rounded-md bg-[#ff3b3b] flex items-center justify-center transition-all hover:scale-105 active:scale-[0.98]">
-            <div className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-white" />
-          </div>
+          <svg viewBox="0 0 512 512" className="h-8 w-8 shrink-0 transition-all hover:scale-105 active:scale-[0.98] drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]" aria-label="PlayHub">
+            <defs>
+              <linearGradient id="ph-admin-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#1d4ed8" />
+                <stop offset="0.55" stopColor="#0b1b4d" />
+                <stop offset="1" stopColor="#05070f" />
+              </linearGradient>
+              <linearGradient id="ph-admin-fg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#ffffff" />
+                <stop offset="1" stopColor="#a9c4ff" />
+              </linearGradient>
+            </defs>
+            <circle cx="256" cy="256" r="248" fill="url(#ph-admin-bg)" />
+            <circle cx="256" cy="256" r="240" fill="none" stroke="#3b82f6" strokeOpacity="0.45" strokeWidth="4" />
+            <path fill="url(#ph-admin-fg)" fillRule="evenodd" d="M168 120 H280 A100 100 0 0 1 280 320 H250 V392 H168 Z M240 170 V270 L330 220 Z" />
+          </svg>
           <span className="text-lg font-black tracking-tight text-white uppercase">PlayHub</span>
-          <span className="bg-[#ff3b3b]/10 text-[#ff3b3b] border border-[#ff3b3b]/20 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider">Control Panel</span>
+          <span className="bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider">Control Panel</span>
         </div>
-        <a href="/" className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#141c18] border border-[#222c26] text-[#aaa] hover:text-white hover:border-[#ff3b3b] transition-all duration-200">
+        <a href="/" className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#141c18] border border-[#222c26] text-[#aaa] hover:text-white hover:border-[#3b82f6] transition-all duration-200">
           <ArrowLeft size={16} />
         </a>
       </nav>
@@ -332,7 +345,7 @@ export default function AdminDashboard() {
         <div className="lg:col-span-5 space-y-6">
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              <UploadCloud size={20} className="text-[#ff3b3b]" /> Broadcast Studio
+              <UploadCloud size={20} className="text-[#3b82f6]" /> Broadcast Studio
             </h1>
             <p className="text-xs text-[#888] mt-1">Distribute high-definition file streams straight to public matrix targets.</p>
           </div>
@@ -340,28 +353,28 @@ export default function AdminDashboard() {
           <form onSubmit={handlePublishSubmit} className="bg-[#0e1411] border border-[#1c2420] rounded-2xl p-5 space-y-4 shadow-2xl">
             <div className="space-y-1.5">
               <label className="text-xs text-[#aaa] font-bold tracking-tight">Video Broadcast Title</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Swahili Dubbed Action Film" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] focus:bg-[#101714] transition-all" required />
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Swahili Dubbed Action Film" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] focus:bg-[#101714] transition-all" required />
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Studio Brand</label>
-                <input type="text" value={channel} onChange={(e) => setChannel(e.target.value)} placeholder="Channel Name" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] transition-all" required />
+                <input type="text" value={channel} onChange={(e) => setChannel(e.target.value)} placeholder="Channel Name" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] transition-all" required />
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Duration</label>
-                <input type="text" value={length} onChange={(e) => setLength(e.target.value)} placeholder="e.g. 2h 15m" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] transition-all" required />
+                <input type="text" value={length} onChange={(e) => setLength(e.target.value)} placeholder="e.g. 2h 15m" className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] transition-all" required />
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Price (TSh)</label>
-                <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] transition-all" required />
+                <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] transition-all" required />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Host Pipeline</label>
-                <select value={videoProvider} onChange={(e) => setVideoProvider(e.target.value)} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] cursor-pointer transition-all">
+                <select value={videoProvider} onChange={(e) => setVideoProvider(e.target.value)} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] cursor-pointer transition-all">
                   <option value="local_file">Direct Local Film Asset</option>
                   <option value="mp4">YouTube Link / URL</option>
                   <option value="vimeo">Vimeo Frame Reference</option>
@@ -370,14 +383,14 @@ export default function AdminDashboard() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Source Key Token</label>
-                <input type="text" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder={videoProvider === 'local_file' ? 'Locked (Use picker field)' : 'Paste frame or link address'} disabled={videoProvider === 'local_file'} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#ff3b3b] disabled:opacity-30 transition-all" />
+                <input type="text" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder={videoProvider === 'local_file' ? 'Locked (Use picker field)' : 'Paste frame or link address'} disabled={videoProvider === 'local_file'} className="w-full bg-[#141d19] border border-[#222c26] rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-[#3b82f6] disabled:opacity-30 transition-all" />
               </div>
             </div>
 
             {videoProvider === 'local_file' && (
               <div className="space-y-1.5 animate-fadeIn">
                 <label className="text-xs text-[#aaa] font-bold tracking-tight">Heavy Video Source Asset</label>
-                <div className="relative border border-[#222c26] border-dashed hover:border-[#ff3b3b] bg-[#141d19] rounded-xl p-4 text-center cursor-pointer transition-all duration-200">
+                <div className="relative border border-[#222c26] border-dashed hover:border-[#3b82f6] bg-[#141d19] rounded-xl p-4 text-center cursor-pointer transition-all duration-200">
                   <input type="file" accept="video/*" onChange={handleVideoFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                   <div className="flex flex-col items-center gap-1.5 py-1">
                     <FileVideo size={18} className="text-[#555]" />
@@ -390,7 +403,7 @@ export default function AdminDashboard() {
 
             <div className="space-y-1.5">
               <label className="text-xs text-[#aaa] font-bold tracking-tight">Cover Thumbnail Artwork</label>
-              <div className="group relative border border-[#222c26] border-dashed hover:border-[#ff3b3b] bg-[#141d19] rounded-xl overflow-hidden aspect-video cursor-pointer flex items-center justify-center transition-all duration-200" style={{ backgroundImage: pendingThumb ? `url(${pendingThumb})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className="group relative border border-[#222c26] border-dashed hover:border-[#3b82f6] bg-[#141d19] rounded-xl overflow-hidden aspect-video cursor-pointer flex items-center justify-center transition-all duration-200" style={{ backgroundImage: pendingThumb ? `url(${pendingThumb})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <input type="file" accept="image/*" onChange={handleThumbnailChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                 {!pendingThumb && (
                   <div className="flex flex-col items-center gap-1.5 text-[#888]">
@@ -404,18 +417,18 @@ export default function AdminDashboard() {
             {uploadProgress > 0 && (
               <div className="bg-[#141d19] border border-[#222c26] p-3.5 rounded-xl space-y-2 animate-fadeIn">
                 <div className="flex justify-between text-[11px] font-bold tracking-tight">
-                  <span className="text-[#888] flex items-center gap-1"><Activity size={12} className="text-[#ff3b3b]" /> Streaming pipeline...</span>
+                  <span className="text-[#888] flex items-center gap-1"><Activity size={12} className="text-[#3b82f6]" /> Streaming pipeline...</span>
                   <span className="text-white font-mono">{uploadSpeed} ({Math.round(uploadProgress)}%)</span>
                 </div>
                 <div className="w-full bg-[#1c2420] h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-gradient-to-r from-[#ff3b3b] to-[#ff5f5f] h-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                  <div className="bg-gradient-to-r from-[#3b82f6] to-[#7fb2ff] h-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
                 </div>
               </div>
             )}
 
-            {uploadError && <p className="text-[#ff5f5f] text-xs font-bold bg-[#ff5f5f]/10 p-2.5 rounded-xl border border-[#ff5f5f]/20 tracking-tight animate-shake">{uploadError}</p>}
+            {uploadError && <p className="text-[#7fb2ff] text-xs font-bold bg-[#7fb2ff]/10 p-2.5 rounded-xl border border-[#7fb2ff]/20 tracking-tight animate-shake">{uploadError}</p>}
             
-            <button type="submit" disabled={isPublishing} className="w-full bg-gradient-to-r from-[#ff3b3b] to-[#ff5f5f] text-white font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-[#ff3b3b]/10 hover:shadow-[#ff3b3b]/20 cursor-pointer disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 transform active:scale-[0.99]">
+            <button type="submit" disabled={isPublishing} className="w-full bg-gradient-to-r from-[#3b82f6] to-[#7fb2ff] text-white font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-[#3b82f6]/10 hover:shadow-[#3b82f6]/20 cursor-pointer disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 transform active:scale-[0.99]">
               {isPublishing ? 'Broadcasting layers...' : 'Publish to Feed Matrix'}
             </button>
           </form>
@@ -430,7 +443,7 @@ export default function AdminDashboard() {
                 TSh {totalSimulatedRevenue.toLocaleString()}
               </h2>
             </div>
-            <div className="h-12 w-12 rounded-2xl bg-[#ff3b3b]/10 border border-[#ff3b3b]/20 flex items-center justify-center text-[#ff3b3b] shadow-xl">
+            <div className="h-12 w-12 rounded-2xl bg-[#3b82f6]/10 border border-[#3b82f6]/20 flex items-center justify-center text-[#3b82f6] shadow-xl">
               <Coins size={20} />
             </div>
           </div>
@@ -445,7 +458,7 @@ export default function AdminDashboard() {
                 <div className="border border-[#1c2420] rounded-2xl py-12 text-center text-xs text-[#888] bg-[#0e1411] font-medium shadow-xl">No active channels published yet.</div>
               ) : (
                 videos.map((v, idx) => (
-                  <div key={v.id || idx} className="flex items-center gap-3.5 border border-[#1c2420] bg-[#0e1411] p-3 rounded-2xl transition-all duration-200 hover:border-[#2d3b27] shadow-lg group">
+                  <div key={v.id || idx} className="flex items-center gap-3.5 border border-[#1c2420] bg-[#0e1411] p-3 rounded-2xl transition-all duration-200 hover:border-[#3b82f6]/60 hover:shadow-[0_0_22px_-6px_rgba(59,130,246,0.5)] shadow-lg group">
                     <div className="h-12 w-20 rounded-xl border border-[#1c2420] bg-[#141d19] overflow-hidden shrink-0 relative flex items-center justify-center shadow-md">
                       <img
                         src={v.thumb && !v.thumb.startsWith('linear') ? v.thumb : "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%23141d19'/></svg>"}
@@ -457,17 +470,17 @@ export default function AdminDashboard() {
                     </div>
                     
                     <div className="flex-1 min-w-0 space-y-1">
-                      <h4 className="text-xs font-bold text-white tracking-tight truncate leading-tight group-hover:text-[#ff3b3b] transition-colors">{v.title}</h4>
+                      <h4 className="text-xs font-bold text-white tracking-tight truncate leading-tight group-hover:text-[#3b82f6] transition-colors">{v.title}</h4>
                       <p className="text-[11px] text-[#888] font-medium flex items-center gap-1.5 truncate">
                         <span className="flex items-center gap-0.5 text-white/60"><Tv size={10} /> {v.channel}</span>
                         <span>&middot;</span>
                         <span className="flex items-center gap-0.5"><Clock size={10} /> {v.length}</span>
                         <span>&middot;</span>
-                        <span className="font-bold text-[#ff3b3b]">{parseInt(v.price) > 0 ? `TSh ${parseInt(v.price).toLocaleString()}` : 'Free'}</span>
+                        <span className="font-bold text-[#3b82f6]">{parseInt(v.price) > 0 ? `TSh ${parseInt(v.price).toLocaleString()}` : 'Free'}</span>
                       </p>
                     </div>
                     
-                    <button onClick={() => handleDeleteVideo(v.id)} className="text-[#555] hover:text-[#ff5f5f] hover:bg-[#ff3b3b]/10 p-2.5 rounded-xl transition-all duration-200 cursor-pointer shrink-0">
+                    <button onClick={() => handleDeleteVideo(v.id)} className="text-[#555] hover:text-[#7fb2ff] hover:bg-[#3b82f6]/10 p-2.5 rounded-xl transition-all duration-200 cursor-pointer shrink-0">
                       <Trash2 size={15} />
                     </button>
                   </div>
