@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "𝐏𝐋𝐀𝐘𝐇𝐔𝐁 | Premium Tanzanian Movie Portal",
+  title: "𝐏𝐋𝐀𝐘𝐇𝐔𝐁",
   description: "Instant Mobile Money Video-On-Demand portal platform.",
 };
 
