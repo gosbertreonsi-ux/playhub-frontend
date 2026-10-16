@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 // FIXED: Using standard named braces to read your utility helper cleanly
-import supabase  from '../../utils/supabase';
+import { supabase } from '../utils/supabase';
 
 import { 
   UploadCloud, 
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   const [uploadSpeed, setUploadSpeed] = useState('');
 
   // FIXED: Auto-appends /api suffix if missing to prevent 404 connection hangs
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5000';
+  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5001';
   const BACKEND_API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
 
     useEffect(() => {

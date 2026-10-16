@@ -81,7 +81,9 @@ export default function PlayHubHome() {
     setIsMiniPlayer(false);
   };
 
-  const BACKEND_API_URL = 'https://playhub-backend1.onrender.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5001/api';
+const BACKEND_API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
+
 
   //DATA FETCHING
   const fetchCloudVideos = async () => {
