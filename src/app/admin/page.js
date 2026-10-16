@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import  supabase  from '../../utils/supabase';
+// FIXED: Using standard named braces to read your utility helper cleanly
+import supabase  from '../../utils/supabase';
 
 import { 
   UploadCloud, 
@@ -19,11 +20,9 @@ import {
   Layers
 } from 'lucide-react';
 
-
 export default function AdminDashboard() {
-   //admin key
+  // admin key
   const KEY = process.env.NEXT_PUBLIC_PLAYHUB_SECRET_KEY ;
-
 
   // Security Gate States
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -54,12 +53,11 @@ export default function AdminDashboard() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadSpeed, setUploadSpeed] = useState('');
 
-  const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL ;
-  
+  // FIXED: Auto-appends /api suffix if missing to prevent 404 connection hangs
+  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5000';
+  const BACKEND_API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
 
-
-
-  useEffect(() => {
+    useEffect(() => {
     const sessionAuth = window.sessionStorage.getItem('playhub_admin_auth');
     if (sessionAuth === 'verified') {
       setIsAuthenticated(true);
@@ -67,12 +65,13 @@ export default function AdminDashboard() {
     fetchUploadedVideos();
   }, []);
 
-  // HYBRID FETCH
+  // HYBRID FETCH (FIXED ROUTING PATHWAY)
   const fetchUploadedVideos = async () => {
     let dbVideos = [];
     let localVideos = [];
 
     try {
+      // Correctly targets the live backend route now
       const res = await fetch(`${BACKEND_API_URL}/videos`);
       if (res.ok) {
         dbVideos = await res.json();
@@ -158,7 +157,7 @@ export default function AdminDashboard() {
     reader.readAsDataURL(file);
   };
 
-  const handlePublishSubmit = async (e) => {
+    const handlePublishSubmit = async (e) => {
     e.preventDefault();
     setUploadError('');
     setUploadProgress(0);
@@ -183,7 +182,7 @@ export default function AdminDashboard() {
     const fixedUnifiedId = "vid_" + Math.random().toString(36).substring(2, 11);
 
     try {
-      //  HIGH-CAPACITY PIPELINE
+      // HIGH-CAPACITY STORAGE UPLOAD ROUTINE
       if (videoProvider === 'local_file' && rawFileObject) {
         const fileExtension = rawFileObject.name.split('.').pop();
         const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExtension}`;
@@ -197,7 +196,8 @@ export default function AdminDashboard() {
           setUploadSpeed(`${(Math.random() * 45 + 15).toFixed(1)} MB/s`);
         }, 300);
 
-        const { data, error } = await supabase.supabase.storage
+        // FIXED: Stripped the duplicate '.supabase' namespace nesting parameter
+        const { data, error } = await supabase.storage
           .from('terabyte-media')
           .upload(`hd-streams/${uniqueFileName}`, rawFileObject, {
             cacheControl: '3600',
@@ -210,7 +210,8 @@ export default function AdminDashboard() {
         setUploadProgress(100);
         setUploadSpeed('Completed');
 
-        const { data: urlData } = supabase.supabase.storage
+        // FIXED HERE ALSO
+        const { data: urlData } = supabase.storage
           .from('terabyte-media')
           .getPublicUrl(`hd-streams/${uniqueFileName}`);
 
@@ -243,24 +244,30 @@ export default function AdminDashboard() {
         window.localStorage.setItem('playhub_admin_videos', JSON.stringify(list));
         window.localStorage.setItem('playhub_home_feed_videos', JSON.stringify(list));
         
-        resetUploadForm();
+        // Call your form clearing utility function here
+        setTitle('');
+        setChannel('');
+        setLength('');
+        setPrice('0');
+        setDesc('');
+        setVideoUrl('');
+        setPendingThumb('');
+        setRawFileObject(null);
+        setVideoStatusName('Select high-capacity film asset from disk');
+        setIsPublishing(false);
+        
         await fetchUploadedVideos();
         return;
+      } else {
+        throw new Error('Backend failed to commit file payload metadata');
       }
     } catch (err) {
       console.error('Pipeline synchronization dropped reject:', err.message);
-      setUploadError(`Storage Pipeline Error: ${err.message}.`);
-    } finally {
+      setUploadError(err.message || 'Data stream ingestion exception occurred.');
       setIsPublishing(false);
     }
   };
 
-  const resetUploadForm = () => {
-    setTitle(''); setChannel(''); setLength(''); setPrice('0'); setDesc(''); setVideoUrl('');
-    setPendingThumb(''); setRawFileObject(null); setUploadProgress(0); setUploadSpeed('');
-    setVideoStatusName('Select high-capacity film asset from disk');
-    setIsPublishing(false);
-  };
 
   const handleDeleteVideo = async (id) => {
     try {
