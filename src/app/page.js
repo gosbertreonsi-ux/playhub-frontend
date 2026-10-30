@@ -53,19 +53,19 @@ const DEMO_ADS = [
     id: "demo-ad-1",
     title: "Your brand belongs here",
     subtitle: "Advertising space",
-    color: "linear-gradient(125deg,#163e29,#07140e,#a71d35)",
+    color: "#090907",
   },
   {
     id: "demo-ad-2",
     title: "Reach a new audience",
     subtitle: "LeeHub Media",
-    color: "linear-gradient(125deg,#5a1424,#101c17,#1f5538)",
+    color: "#090907",
   },
   {
     id: "demo-ad-3",
     title: "Create. Connect. Inspire.",
     subtitle: "Featured placement",
-    color: "linear-gradient(125deg,#10291c,#7b1c2f,#07110c)",
+    color: "#090907",
   },
 ];
 
