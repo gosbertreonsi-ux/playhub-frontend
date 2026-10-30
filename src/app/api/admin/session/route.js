@@ -1,35 +1,88 @@
-import { NextResponse } from 'next/server';
-import { checkAdminPassword, startAdminSession, isAdmin, endAdminSession, validOrigin } from '@/lib/admin-auth';
-export const runtime = 'nodejs';
+import { NextResponse } from "next/server";
 
-// Local-development rate limiting. Use Redis/shared store and named accounts for production.
-const attempts = new Map();
+import {
+  checkAdminPassword,
+  startAdminSession,
+  isAdmin,
+  endAdminSession,
+  validOrigin,
+} from "@/lib/admin-auth";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const noStore = {
+  "Cache-Control": "no-store",
+};
+
 export async function GET() {
-  return NextResponse.json({ authenticated: await isAdmin() }, { headers: { 'Cache-Control': 'no-store' } });
-}
-export async function POST(request) {
-  if (!validOrigin(request)) return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';
-  const now = Date.now();
-  const current = attempts.get(ip) || { count: 0, until: now + 15 * 60_000 };
-  if (now > current.until) { current.count = 0; current.until = now + 15 * 60_000; }
-  if (current.count >= 10) return NextResponse.json({ error: 'Too many attempts. Try later.' }, { status: 429 });
   try {
-    const body = await request.json();
-    if (!checkAdminPassword(body?.password)) {
-      current.count++;
-      attempts.set(ip, current);
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
-    }
-    attempts.delete(ip);
-    await startAdminSession();
-    return NextResponse.json({ authenticated: true }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json(
+      { authenticated: await isAdmin() },
+      { headers: noStore }
+    );
   } catch {
-    return NextResponse.json({ error: 'Authentication configuration error' }, { status: 503 });
+    return NextResponse.json(
+      { authenticated: false, error: "Session configuration error" },
+      { status: 503, headers: noStore }
+    );
   }
 }
+
+export async function POST(request) {
+  if (!validOrigin(request)) {
+    return NextResponse.json(
+      { error: "Invalid request origin" },
+      { status: 403 }
+    );
+  }
+
+  try {
+    const body = await request.json();
+
+    if (
+      typeof body.password !== "string" ||
+      body.password.length > 1024
+    ) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
+    }
+
+    if (!checkAdminPassword(body.password)) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
+    }
+
+    await startAdminSession();
+
+    return NextResponse.json(
+      { authenticated: true },
+      { headers: noStore }
+    );
+  } catch {
+    return NextResponse.json(
+      { error: "Authentication unavailable" },
+      { status: 503 }
+    );
+  }
+}
+
 export async function DELETE(request) {
-  if (!validOrigin(request)) return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
+  if (!validOrigin(request)) {
+    return NextResponse.json(
+      { error: "Invalid request origin" },
+      { status: 403 }
+    );
+  }
+
   await endAdminSession();
-  return NextResponse.json({ authenticated: false });
+
+  return NextResponse.json(
+    { authenticated: false },
+    { headers: noStore }
+  );
 }
