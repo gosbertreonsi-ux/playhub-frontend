@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/*@import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -23,4 +23,105 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+*/
+
+html {
+  filter: grayscale(1);
+}
+
+/* ===================================================
+   LEEHUB MEDIA — INITIAL CHARCOAL THEME
+   Reference color: #090907
+   =================================================== */
+
+:root {
+  --leehub-primary: #090907;
+  --leehub-background: #090907;
+  --leehub-surface: #111110;
+  --leehub-surface-raised: #191918;
+  --leehub-border: #393937;
+  --leehub-text: #f5f5f2;
+  --leehub-muted: #aaa9a5;
+  --leehub-accent: #d9d9d3;
+
+  color-scheme: dark;
+}
+
+html {
+  filter: none !important;
+  background: var(--leehub-background);
+}
+
+body {
+  background: var(--leehub-background) !important;
+  color: var(--leehub-text);
+}
+
+/* Main application backgrounds */
+body :where(
+  [class*="bg-[#"],
+  [class*="bg-gradient"],
+  [class*="bg-[radial-gradient"]
+) {
+  background-color: var(--leehub-primary) !important;
+  background-image: none !important;
+}
+
+/* Darker elevated panels and containers */
+body :where(
+  aside,
+  header,
+  footer,
+  nav
+) {
+  background-color: var(--leehub-primary);
+}
+
+/* Remove previous colored text accents */
+body [class*="text-[#"] {
+  color: var(--leehub-text) !important;
+}
+
+/* Remove previous colored borders */
+body [class*="border-[#"] {
+  border-color: var(--leehub-border) !important;
+}
+
+/* Neutral buttons */
+body button {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+body button:hover {
+  border-color: var(--leehub-muted);
+}
+
+/* Neutral form fields */
+body input,
+body textarea,
+body select {
+  color: var(--leehub-text);
+  accent-color: var(--leehub-accent);
+}
+
+body input::placeholder,
+body textarea::placeholder {
+  color: var(--leehub-muted);
+}
+
+/* Keyboard navigation remains visible */
+body :focus-visible {
+  outline: 2px solid var(--leehub-accent);
+  outline-offset: 3px;
+}
+
+/* Keep videos and images in their original colors */
+body img,
+body video,
+body iframe {
+  filter: none !important;
 }
