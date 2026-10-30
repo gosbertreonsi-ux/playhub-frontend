@@ -1,34 +1,42 @@
 import "server-only";
 
-export async function adminBackendRequest(path, options = {}) {
-  const backend = process.env.BACKEND_API_URL;
-  const token = process.env.ADMIN_API_TOKEN;
+export async function adminBackendRequest(
+  path,
+  options = {}
+) {
+  const backendUrl = process.env.BACKEND_API_URL;
+  const adminToken = process.env.ADMIN_API_TOKEN;
 
-  if (!backend || !token) {
-    throw new Error("Backend API credentials are not configured");
+  if (!backendUrl || !adminToken) {
+    throw new Error(
+      "BACKEND_API_URL or ADMIN_API_TOKEN is missing"
+    );
   }
 
-  const base = backend
+  const base = backendUrl
     .replace(/\/+$/, "")
     .replace(/\/api$/, "");
 
-  const response = await fetch(`${base}/api${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `${base}/api${path}`,
+    {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+        Authorization: `Bearer ${adminToken}`,
+      },
+      cache: "no-store",
+    }
+  );
 
   const data = await response.json().catch(() => ({
-    error: "Invalid backend response",
+    error: "Backend returned an invalid response",
   }));
 
   return {
-    status: response.status,
     ok: response.ok,
+    status: response.status,
     data,
   };
 }
