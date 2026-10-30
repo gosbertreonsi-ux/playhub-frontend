@@ -1,16 +1,55 @@
-import { isAdmin, validOrigin } from '@/lib/admin-auth';
-import { backendConfig, relay } from '@/lib/admin-backend';
-export const runtime = 'nodejs';
+import { NextResponse } from "next/server";
+
+import {
+  isAdmin,
+  validOrigin,
+} from "@/lib/admin-auth";
+
+import {
+  adminBackendRequest,
+} from "@/lib/admin-backend";
+
+export const runtime = "nodejs";
+
 export async function DELETE(request, { params }) {
-  if (!(await isAdmin())) return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  if (!validOrigin(request)) return Response.json({ error: 'Invalid origin' }, { status: 403 });
-  let cfg;
-  try { cfg = backendConfig(); } catch { return Response.json({ error: 'Backend not configured' }, { status: 503 }); }
+  if (!(await isAdmin())) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  if (!validOrigin(request)) {
+    return NextResponse.json(
+      { error: "Invalid request origin" },
+      { status: 403 }
+    );
+  }
+
   const { id } = await params;
+
+  if (!id || typeof id !== "string") {
+    return NextResponse.json(
+      { error: "Video ID is required" },
+      { status: 400 }
+    );
+  }
+
   try {
-    return await relay(await fetch(`${cfg.base}/api/videos/${encodeURIComponent(id)}`, {
-      method: 'DELETE', headers: { Authorization: `Bearer ${cfg.token}` },
-      cache: 'no-store', signal: AbortSignal.timeout(20000)
-    }));
-  } catch { return Response.json({ error: 'Backend unavailable' }, { status: 502 }); }
+    const result = await adminBackendRequest(
+      `/videos/${encodeURIComponent(id)}`,
+      { method: "DELETE" }
+    );
+
+    return NextResponse.json(result.data, {
+      status: result.status,
+    });
+  } catch (error) {
+    console.error("Admin video deletion failed:", error.message);
+
+    return NextResponse.json(
+      { error: "Deleting video failed" },
+      { status: 502 }
+    );
+  }
 }
