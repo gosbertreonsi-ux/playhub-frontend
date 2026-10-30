@@ -1,12 +1,34 @@
-import 'server-only';
-export function backendConfig() {
-  const url = process.env.BACKEND_API_URL;
+import "server-only";
+
+export async function adminBackendRequest(path, options = {}) {
+  const backend = process.env.BACKEND_API_URL;
   const token = process.env.ADMIN_API_TOKEN;
-  if (!url || !token) throw new Error('BACKEND_API_URL or ADMIN_API_TOKEN not configured');
-  return { base: url.replace(/\/+$/, '').replace(/\/api$/, ''), token };
-}
-export async function relay(response) {
-  const contentType = response.headers.get('content-type') || '';
-  const payload = contentType.includes('application/json') ? await response.json() : { error: 'Backend returned an invalid response' };
-  return Response.json(payload, { status: response.status, headers: { 'Cache-Control': 'no-store' } });
+
+  if (!backend || !token) {
+    throw new Error("Backend API credentials are not configured");
+  }
+
+  const base = backend
+    .replace(/\/+$/, "")
+    .replace(/\/api$/, "");
+
+  const response = await fetch(`${base}/api${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...options.headers,
+    },
+    cache: "no-store",
+  });
+
+  const data = await response.json().catch(() => ({
+    error: "Invalid backend response",
+  }));
+
+  return {
+    status: response.status,
+    ok: response.ok,
+    data,
+  };
 }
