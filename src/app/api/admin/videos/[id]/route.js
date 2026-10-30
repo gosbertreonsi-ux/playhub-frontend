@@ -3,34 +3,49 @@ import { NextResponse } from "next/server";
 import {
   isAdmin,
   validOrigin,
-} from "@/lib/admin-auth";
+} from "../../../../../lib/admin-auth";
 
 import {
   adminBackendRequest,
-} from "@/lib/admin-backend";
+} from "../../../../../lib/admin-backend";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function DELETE(request, { params }) {
+  // Authentication check.
   if (!(await isAdmin())) {
     return NextResponse.json(
-      { error: "Unauthorized" },
+      {
+        success: false,
+        error: "Administrator authentication required",
+      },
       { status: 401 }
     );
   }
 
+  // Origin validation.
   if (!validOrigin(request)) {
     return NextResponse.json(
-      { error: "Invalid request origin" },
+      {
+        success: false,
+        error: "Invalid request origin",
+      },
       { status: 403 }
     );
   }
 
   const { id } = await params;
 
-  if (!id || typeof id !== "string") {
+  if (
+    typeof id !== "string" ||
+    !id.trim()
+  ) {
     return NextResponse.json(
-      { error: "Video ID is required" },
+      {
+        success: false,
+        error: "A valid video ID is required",
+      },
       { status: 400 }
     );
   }
@@ -38,17 +53,26 @@ export async function DELETE(request, { params }) {
   try {
     const result = await adminBackendRequest(
       `/videos/${encodeURIComponent(id)}`,
-      { method: "DELETE" }
+      {
+        method: "DELETE",
+      }
     );
 
-    return NextResponse.json(result.data, {
-      status: result.status,
-    });
+    return NextResponse.json(
+      result.data,
+      { status: result.status }
+    );
   } catch (error) {
-    console.error("Admin video deletion failed:", error.message);
+    console.error(
+      "Video deletion error:",
+      error.message
+    );
 
     return NextResponse.json(
-      { error: "Deleting video failed" },
+      {
+        success: false,
+        error: "Unable to delete video",
+      },
       { status: 502 }
     );
   }
