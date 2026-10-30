@@ -24,7 +24,9 @@ function getSecret() {
   const secret = process.env.ADMIN_SESSION_SECRET;
 
   if (!secret || secret.length < 32) {
-    throw new Error("ADMIN_SESSION_SECRET must contain at least 32 characters");
+    throw new Error(
+      "ADMIN_SESSION_SECRET must contain at least 32 characters"
+    );
   }
 
   return secret;
@@ -40,7 +42,9 @@ export function checkAdminPassword(password) {
   const configured = process.env.ADMIN_PASSWORD;
 
   if (!configured || configured.length < 16) {
-    throw new Error("ADMIN_PASSWORD is not configured securely");
+    throw new Error(
+      "ADMIN_PASSWORD must contain at least 16 characters"
+    );
   }
 
   return secureCompare(password ?? "", configured);
@@ -53,7 +57,8 @@ export function validOrigin(request) {
 }
 
 export async function startAdminSession() {
-  const expiresAt = Date.now() + SESSION_DURATION * 1000;
+  const expiresAt =
+    Date.now() + SESSION_DURATION * 1000;
 
   const payload = String(expiresAt);
   const token = `${payload}.${sign(payload)}`;
@@ -79,17 +84,19 @@ export async function isAdmin() {
 
   if (parts.length !== 2) return false;
 
-  const [payload, signature] = parts;
+  const [payload, receivedSignature] = parts;
   const expiry = Number(payload);
 
   if (!Number.isSafeInteger(expiry)) return false;
   if (expiry <= Date.now()) return false;
 
-  return secureCompare(signature, sign(payload));
+  return secureCompare(
+    receivedSignature,
+    sign(payload)
+  );
 }
 
 export async function endAdminSession() {
   const cookieStore = await cookies();
-
   cookieStore.delete(COOKIE_NAME);
 }
