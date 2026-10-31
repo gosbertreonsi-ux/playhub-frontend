@@ -24,7 +24,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-*/
+
 
 html {
   filter: grayscale(1);
@@ -33,7 +33,7 @@ html {
 /* ===================================================
    LEEHUB MEDIA — INITIAL CHARCOAL THEME
    Reference color: #090907
-   =================================================== */
+   =================================================== 
 
 :root {
   --leehub-primary: #090907;
@@ -58,7 +58,7 @@ body {
   color: var(--leehub-text);
 }
 
-/* Main application backgrounds */
+/* Main application backgrounds 
 body :where(
   [class*="bg-[#"],
   [class*="bg-gradient"],
@@ -68,7 +68,7 @@ body :where(
   background-image: none !important;
 }
 
-/* Darker elevated panels and containers */
+/* Darker elevated panels and containers 
 body :where(
   aside,
   header,
@@ -78,17 +78,17 @@ body :where(
   background-color: var(--leehub-primary);
 }
 
-/* Remove previous colored text accents */
+/* Remove previous colored text accents 
 body [class*="text-[#"] {
   color: var(--leehub-text) !important;
 }
 
-/* Remove previous colored borders */
+/* Remove previous colored borders 
 body [class*="border-[#"] {
   border-color: var(--leehub-border) !important;
 }
 
-/* Neutral buttons */
+/* Neutral buttons 
 body button {
   transition:
     background-color 200ms ease,
@@ -100,7 +100,7 @@ body button:hover {
   border-color: var(--leehub-muted);
 }
 
-/* Neutral form fields */
+/* Neutral form fields 
 body input,
 body textarea,
 body select {
@@ -113,15 +113,39 @@ body textarea::placeholder {
   color: var(--leehub-muted);
 }
 
-/* Keyboard navigation remains visible */
+/* Keyboard navigation remains visible 
 body :focus-visible {
   outline: 2px solid var(--leehub-accent);
   outline-offset: 3px;
 }
 
-/* Keep videos and images in their original colors */
+/* Keep videos and images in their original colors 
 body img,
 body video,
 body iframe {
   filter: none !important;
+*/
+
+/* ==========================================
+   LEEHUB MEDIA — CHARCOAL FOUNDATION
+   Original layout restored
+   ========================================== */
+
+:root {
+  --leehub-background: #090907;
+  --leehub-surface: #111110;
+  --leehub-border: #30302e;
+  --leehub-text: #f5f5f2;
+  --leehub-muted: #aaa9a5;
+}
+
+html,
+body {
+  background-color: var(--leehub-background);
+  color: var(--leehub-text);
+}
+
+html {
+  filter: none;
+  color-scheme: dark;
 }

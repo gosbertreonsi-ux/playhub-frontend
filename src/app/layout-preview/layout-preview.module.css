@@ -15,7 +15,7 @@
 
 /* v3: two identical, viewport-filling groups create a gapless infinite carousel. */
 .advertiserViewport{min-width:0}
-.advertiserTrack{display:flex;gap:0;animation:leehub-ads-scroll 32s linear infinite}
+.advertiserTrack{display:flex;gap:0;animation:leehub-ads-scroll 20s linear infinite}
 .advertiserGroup{display:flex;gap:16px;padding-right:16px;flex:0 0 auto;min-width:0}
 @keyframes leehub-ads-scroll{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.advertiserTrack{animation:none}}
@@ -24,7 +24,7 @@
 .shell{--bg:#0b0d0d;--surface:#141a16;--ink:#f5f3ee;--muted:#acb9ae;--line:#304036;min-height:100vh;background:radial-gradient(ellipse at 65% 0%,#1b3929,transparent 50%),var(--bg);color:var(--ink);color-scheme:dark}
 .shell button:focus-visible,.shell a:focus-visible,.shell input:focus-visible{outline:2px solid #ee5365;outline-offset:3px}
 .rail{background:#0a110d;border-color:#304036;box-shadow:6px 0 30px #0008}
-.logo{color:#f7f5ec;border-color:#b71d31;background:#203627}
+.logo{color:#f7f5ec;border-color:#b71d31;background:#203627 }
 .railButton{color:#f5f5ee;border-color:#3b4a3e;background:#1a2a20}.railButton:hover{background:#385642}
 .flyout{background:#142219;border-color:#405342;box-shadow:0 18px 32px #0009}.flyout button{color:white}.flyout button:hover{background:#28422e}.flyoutNote{color:#b3bbb1}
 .header{background:#0b130fec;border-color:#304036;backdrop-filter:blur(14px)}.searchBox{background:#17231b;border-color:#405345;color:#faf8ef}.searchBox input{color:#f7f7f0}.searchBox input::placeholder{color:#aab4aa}.searchBox:focus-within{border-color:#cf4052}
@@ -38,3 +38,272 @@
 @media(prefers-reduced-motion:reduce){.poster{transition:none}}
 
 .apiNotice{padding:10px 13px;margin-bottom:14px;border:1px solid #3b5143;border-radius:10px;background:#13241a;color:#c6d7c8;font-size:12px;display:flex;justify-content:space-between;gap:12px;align-items:center;overflow-wrap:anywhere}.apiNotice button{background:#b71d31;color:white;border:0;border-radius:20px;padding:7px 14px}
+
+/* LeeHub primary background: user-selected Charcoal */
+.shell{--bg:#090907;background-color:#090907}
+
+
+/* ==================================================
+   LEEHUB MEDIA — BLACK & WHITE FOUNDATION
+   No brand colors
+   Preserve all existing layout dimensions
+   ================================================== */
+
+.shell {
+  --bg: #000000;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #777777;
+  --line: #cccccc;
+
+  background: #000000;
+  color: #ffffff;
+  color-scheme: dark;
+}
+
+/* Sidebar */
+.rail {
+  background: #000000;
+  border-color: #ffffff;
+}
+
+.logo,
+.railButton {
+  background: #000000;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.railButton:hover,
+.flyout,
+.flyout button:hover {
+  background: #222222;
+  color: #ffffff;
+}
+
+/* Header */
+.header {
+  background: #000000;
+  border-color: #ffffff;
+}
+
+.headerLabel {
+  color: #ffffff;
+}
+
+.searchBox {
+  background: #ffffff;
+  border-color: #777777;
+  color: #000000;
+}
+
+.searchBox input,
+.searchBox input::placeholder {
+  color: #000000;
+}
+
+.aboutPill {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* Creator statuses */
+.statusSection {
+  border-color: #777777;
+}
+
+.statusCard {
+  color: #ffffff;
+}
+
+.statusPhoto {
+  border-color: #ffffff;
+  outline-color: #ffffff;
+}
+
+.statusNext {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* Filters */
+.filterRow button {
+  background: #ffffff;
+  border-color: #777777;
+  color: #000000;
+}
+
+.filterRow button.activeFilter {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Video cards */
+.poster {
+  background: #222222;
+  border-color: #777777;
+  box-shadow: none;
+}
+
+.videoCard:hover .poster {
+  border-color: #ffffff;
+}
+
+.posterPlay {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.videoInfo strong {
+  color: #ffffff;
+}
+
+.videoInfo span {
+  color: #cccccc;
+}
+
+.videoInfo small {
+  color: #aaaaaa;
+}
+
+/* Entry screen */
+.entryLayout,
+.introPanel,
+.entrySide {
+  background: #000000;
+  border-color: #777777;
+}
+
+.topLine,
+.introStage h1 {
+  color: #ffffff;
+}
+
+.introStage p,
+.eyebrow,
+.payCard p,
+.payCard small {
+  color: #cccccc;
+}
+
+.introVideo {
+  background: #222222;
+  border-color: #777777;
+  color: #ffffff;
+}
+
+/* Entry controls */
+.methodRow button {
+  background: #ffffff;
+  color: #000000;
+  border-color: #777777;
+}
+
+.methodRow button.activeMethod {
+  background: #333333;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.placeholderBox {
+  background: #111111;
+  color: #ffffff;
+  border-color: #777777;
+}
+
+.fullButton {
+  background: #ffffff;
+  color: #000000;
+}
+
+.textButton {
+  color: #ffffff;
+}
+
+/* Watch screen */
+.watchLayout {
+  background: #000000;
+}
+
+.playerWindow {
+  background: #111111;
+  border-color: #777777;
+}
+
+.watchInfo p {
+  color: #cccccc;
+}
+
+.relatedColumn {
+  background: #000000;
+  border-color: #777777;
+}
+
+.relatedCard {
+  color: #ffffff;
+}
+
+.relatedCard small {
+  color: #aaaaaa;
+}
+
+.relatedActions button {
+  background: #ffffff;
+  border-color: #777777;
+  color: #000000;
+}
+
+/* Advertisements */
+.advertiserSection {
+  background: #000000;
+  border-color: #777777;
+}
+
+.adEyebrow,
+.advertiserCaption,
+.advertiserCard > a,
+.advertiserNote {
+  color: #cccccc;
+}
+
+.adPreviewButton {
+  background: #ffffff;
+  color: #000000;
+  border-color: #777777;
+}
+
+.adUploadBox {
+  background: #111111;
+  color: #ffffff;
+  border-color: #777777;
+}
+
+.advertiserVisual {
+  background: #222222;
+  border-color: #777777;
+  box-shadow: none;
+}
+
+/* API notices */
+.apiNotice {
+  background: #111111;
+  border-color: #777777;
+  color: #ffffff;
+}
+
+.apiNotice button {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Visible keyboard focus */
+.shell button:focus-visible,
+.shell a:focus-visible,
+.shell input:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}

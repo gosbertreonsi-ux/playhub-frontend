@@ -1,25 +1,27 @@
 "use client";
+import styles from "./layout-preview.module.css";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import styles from "./layout-preview.module.css";
+import { Home, Menu, Info, Play, Search, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+
 
 type Screen = "entry" | "home" | "watch";
 type Video = { id: string | number; title: string; creator: string; tag: string; duration: string; paid: boolean; background: string; thumbnail?: string; description?: string; source?: "demo" | "api" };
 
 const demoVideos: Video[] = [
-  { id: 1, title: "Beyond the Horizon", creator: "LeeHub Originals", tag: "Film", duration: "18:24", paid: false, background: "linear-gradient(130deg,#123b27,#04140f,#9c1e30)" },
-  { id: 2, title: "City After Dark", creator: "Juma Stories", tag: "Documentary", duration: "12:09", paid: true, background: "linear-gradient(130deg,#551323,#102a1c,#070c0c)" },
-  { id: 3, title: "A New Frequency", creator: "Sound Lab", tag: "Music", duration: "04:16", paid: false, background: "linear-gradient(130deg,#06120c,#204c30,#7d1729)" },
-  { id: 4, title: "The Road Home", creator: "Maya Films", tag: "Series", duration: "31:07", paid: true, background: "linear-gradient(130deg,#0d1510,#6c1a29,#1f543d)" },
-  { id: 5, title: "Under the Surface", creator: "Nuru Studio", tag: "Film", duration: "25:40", paid: true, background: "linear-gradient(130deg,#04140e,#264c36,#a02030)" },
-  { id: 6, title: "An Evening in Dar", creator: "Street Views", tag: "Lifestyle", duration: "09:18", paid: false, background: "linear-gradient(130deg,#1b1615,#173c2a,#661320)" },
-  { id: 7, title: "New Wave Sessions", creator: "Music Corner", tag: "Music", duration: "06:34", paid: false, background: "linear-gradient(130deg,#07180e,#862038,#213e2c)" },
-  { id: 8, title: "The Artist's Journey", creator: "Art House", tag: "Documentary", duration: "16:12", paid: true, background: "linear-gradient(130deg,#11291b,#3a1021,#0b1010)" },
-  { id: 9, title: "Night Signals", creator: "LeeHub Originals", tag: "Series", duration: "22:30", paid: true, background: "linear-gradient(130deg,#661322,#0b1913,#31583b)" },
-  { id: 10, title: "A Place to Begin", creator: "Open Studio", tag: "Lifestyle", duration: "13:41", paid: false, background: "linear-gradient(130deg,#0c1613,#284e32,#701526)" },
-  { id: 11, title: "Sound Without Borders", creator: "Sound Lab", tag: "Music", duration: "05:06", paid: false, background: "linear-gradient(130deg,#173421,#781526,#07120f)" },
-  { id: 12, title: "The Last Chapter", creator: "Maya Films", tag: "Film", duration: "42:19", paid: true, background: "linear-gradient(130deg,#401521,#0c2117,#29553c)" },
+  { id: 1, title: "Beyond the Horizon", creator: "LeeHub Originals", tag: "Film", duration: "18:24", paid: false, background: "#222222" },
+  { id: 2, title: "City After Dark", creator: "Juma Stories", tag: "Documentary", duration: "12:09", paid: true, background: "#222222" },
+  { id: 3, title: "A New Frequency", creator: "Sound Lab", tag: "Music", duration: "04:16", paid: false, background: "#222222" },
+  { id: 4, title: "The Road Home", creator: "Maya Films", tag: "Series", duration: "31:07", paid: true, background: "#222222" },
+  { id: 5, title: "Under the Surface", creator: "Nuru Studio", tag: "Film", duration: "25:40", paid: true, background: "#222222" },
+  { id: 6, title: "An Evening in Dar", creator: "Street Views", tag: "Lifestyle", duration: "09:18", paid: false, background: "#222222" },
+  { id: 7, title: "New Wave Sessions", creator: "Music Corner", tag: "Music", duration: "06:34", paid: false, background: "#222222" },
+  { id: 8, title: "The Artist's Journey", creator: "Art House", tag: "Documentary", duration: "16:12", paid: true, background: "#222222" },
+  { id: 9, title: "Night Signals", creator: "LeeHub Originals", tag: "Series", duration: "22:30", paid: true, background: "#222222" },
+  { id: 10, title: "A Place to Begin", creator: "Open Studio", tag: "Lifestyle", duration: "13:41", paid: false, background: "#222222" },
+  { id: 11, title: "Sound Without Borders", creator: "Sound Lab", tag: "Music", duration: "05:06", paid: false, background: "#222222" },
+  { id: 12, title: "The Last Chapter", creator: "Maya Films", tag: "Film", duration: "42:19", paid: true, background: "#222222" },
 ];
 const demoStatuses = [
   { creator: "Asha", video: demoVideos[0] }, { creator: "Kito", video: demoVideos[1] },
@@ -30,7 +32,7 @@ const demoStatuses = [
 
 type ApiObject = Record<string, unknown>;
 const VIDEO_ENDPOINT = process.env.NEXT_PUBLIC_LEEHUB_VIDEOS_PATH || "/api/videos";
-const API_BASE = (process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:5001").replace(/\/$/, "");
+const API_BASE = (process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:5001").replace(/\/+$/, "").replace(/\/api$/, "");
 function property(obj: ApiObject, ...keys: string[]): unknown {
   for (const key of keys) if (obj[key] !== undefined && obj[key] !== null) return obj[key];
   return undefined;
@@ -44,13 +46,13 @@ function normalizeVideo(raw: unknown, index: number): Video | null {
   const creatorValue = property(v, "creator", "channel", "author", "uploadedBy");
   const creator = typeof creatorValue === "object" && creatorValue !== null ? str(property(creatorValue as ApiObject, "name", "username"), "LeeHub Creator") : str(creatorValue, "LeeHub Creator");
   const cost = property(v, "price", "priceTzs", "priceTZS");
-  const paid = v.isPremium === true || v.isPaid === true || v.premium === true || v.paid === true || (typeof cost === "number" && cost > 0);
+  const paid = v.isPremium === true || v.isPaid === true || v.premium === true || v.paid === true || (Number(cost) > 0);
   return {
     id: str(property(v, "id", "_id", "uuid"), String(index)), title, creator,
     tag: str(property(v, "category", "genre", "tag", "type"), "Film"),
     duration: str(property(v, "durationFormatted", "duration", "length"), ""),
-    paid, background: "linear-gradient(130deg,#04140e,#264c36,#a02030)",
-    thumbnail: str(property(v, "thumbnailUrl", "thumbnail_url", "thumbnail", "posterUrl", "poster", "imageUrl", "image")),
+    paid, background: "#222222",
+    thumbnail: str(property(v, "thumbnailUrl", "thumbnail_url", "thumbnail", "posterUrl", "poster", "imageUrl", "image", "thumb")),
     description: str(property(v, "description", "summary")), source: "api"
   };
 }
@@ -69,7 +71,18 @@ function extractItems(payload: unknown): unknown[] | null {
   return null;
 }
 function videoPoster(v: Video): CSSProperties {
-  return { background: v.thumbnail ? `linear-gradient(#0004,#0003), url("${v.thumbnail.replace(/"/g, "%22")}") center / cover` : v.background };
+  if (v.thumbnail) {
+    return {
+      backgroundImage: `url("${v.thumbnail.replace(/"/g, "%22")}")`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundColor: "#222222",
+    };
+  }
+
+  return {
+    background: "#222222",
+  };
 }
 
 type Promotion = { id: string; title: string; label: string; image?: string; href?: string };
@@ -138,12 +151,12 @@ function AdvertiserMarquee() {
             {ad.image && <img src={ad.image} alt="" loading="lazy" onError={e => { e.currentTarget.style.display = "none"; }} />}
             <div className={styles.advertiserCopy}><span>{ad.label}</span><strong>{ad.title}</strong></div>
           </div>
-          {ad.href ? <a href={ad.href} rel="noopener noreferrer sponsored" target="_blank">View promotion ↗</a> : <span className={styles.advertiserCaption}>Featured promotion</span>}
+          {ad.href ? <a href={ad.href} rel="noopener noreferrer sponsored" target="_blank">View promotion <ArrowUpRight size={14} aria-hidden="true" /></a> : <span className={styles.advertiserCaption}>Featured promotion</span>}
         </div>)}
         </div>)}
       </div>
     </div>
-    <p className={styles.advertiserNote}>Sponsored and featured content · Scroll pauses on hover or focus</p>
+    <p className={styles.advertiserNote}>Sponsored and featured content  -  Scroll pauses on hover or focus</p>
   </section>;
 }
 
@@ -178,7 +191,7 @@ export default function LeeHubLayoutPreview() {
     return () => ctrl.abort();
   }, [reload]);
   const statuses = videos.slice(0, 8).map(v => ({ creator: v.creator, video: v }));
-  const [selected, setSelected] = useState<Video>(videos[0]);
+  const [selected, setSelected] = useState<Video>(demoVideos[0]);
   const [query, setQuery] = useState("");
   const [relatedQuery, setRelatedQuery] = useState("");
   const [filter, setFilter] = useState("All");
@@ -190,10 +203,10 @@ export default function LeeHubLayoutPreview() {
   const visibleVideos = useMemo(() => videos.filter(v =>
     (filter === "All" || filter === v.tag || (filter === "Free" && !v.paid) || (filter === "Premium" && v.paid)) &&
     `${v.title} ${v.creator} ${v.tag}`.toLowerCase().includes(query.toLowerCase())
-  ), [query, filter]);
+  ), [videos, query, filter]);
   const relatedVideos = useMemo(() => videos.filter(v => v.id !== selected.id &&
     `${v.title} ${v.creator}`.toLowerCase().includes(relatedQuery.toLowerCase())
-  ), [relatedQuery, selected.id]);
+  ), [videos, relatedQuery, selected.id]);
 
   function openVideo(video: Video) {
     setSelected(video);
@@ -210,9 +223,9 @@ export default function LeeHubLayoutPreview() {
   return <div className={styles.shell}>
     <aside className={styles.rail} aria-label="Primary navigation">
       <button className={styles.logo} onClick={() => navigate("home")} aria-label="LeeHub Media home">L</button>
-      <button className={styles.railButton} onClick={() => navigate("home")} title="Home" aria-label="Home">⌂</button>
+      <button className={styles.railButton} onClick={() => navigate("home")} title="Home" aria-label="Home"><Home size={20} aria-hidden="true" /></button>
       <div className={styles.menuWrap} onMouseLeave={() => setMenuOpen(false)}>
-        <button className={styles.railButton} aria-expanded={menuOpen} onClick={() => setMenuOpen(x => !x)} title="Menu" aria-label="Menu">☷</button>
+        <button className={styles.railButton} aria-expanded={menuOpen} onClick={() => setMenuOpen(x => !x)} title="Menu" aria-label="Menu"><Menu size={20} aria-hidden="true" /></button>
         {menuOpen && <div className={styles.flyout}>
           <button onClick={() => navigate("home")}>Home</button>
           <button onClick={() => navigate("entry")}>About / Entry</button>
@@ -220,7 +233,7 @@ export default function LeeHubLayoutPreview() {
           <div className={styles.flyoutNote}>Additional categories and account actions will be wired later.</div>
         </div>}
       </div>
-      <button className={styles.railButton} onClick={() => navigate("entry")} title="About" aria-label="About">ⓘ</button>
+      <button className={styles.railButton} onClick={() => navigate("entry")} title="About" aria-label="About"><Info size={20} aria-hidden="true" /></button>
     </aside>
 
     <div className={styles.workspace}>
@@ -231,7 +244,7 @@ export default function LeeHubLayoutPreview() {
             <span className={styles.eyebrow}>WELCOME TO LEEHUB</span>
             <h1>Stories that deserve the screen.</h1>
             <p>Discover original films, music, documentaries, and voices worth hearing.</p>
-            <div className={styles.introVideo} role="img" aria-label="Intro video placeholder"><span>▶</span><small>INTRO VIDEO · Replace with existing player</small></div>
+            <div className={styles.introVideo} role="img" aria-label="Intro video placeholder"><span><Play size={22} fill="currentColor" aria-hidden="true" /></span><small>INTRO VIDEO  -  Replace with existing player</small></div>
             <p className={styles.note}>Your existing introduction and words will appear here. No streaming integration is changed in this prototype.</p>
           </div>
         </section>
@@ -244,15 +257,15 @@ export default function LeeHubLayoutPreview() {
             <div className={styles.methodRow}>{["Mobile money", "Card"].map(m => <button key={m} onClick={() => setPaymentMethod(m)} className={paymentMethod === m ? styles.activeMethod : ""}>{m}</button>)}</div>
             <div className={styles.placeholderBox}>{paymentMethod} payment form / original modal goes here</div>
             <button className={styles.fullButton} disabled>Payment integration pending</button>
-            <button className={styles.textButton} onClick={() => navigate("home")}>Preview home layout →</button>
+            <button className={styles.textButton} onClick={() => navigate("home")}>Preview home layout <ArrowRight size={16} aria-hidden="true" /></button>
             <small>This preview button is for layout testing only. It does not grant paid content access.</small>
           </div>
         </section>
       </main> : <>
         <header className={styles.header}>
           <div className={styles.headerLabel}>{screen === "home" ? "DISCOVER" : "NOW WATCHING"}</div>
-          <label className={styles.searchBox}><span>⌕</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search videos, titles or creators" aria-label="Search videos" /></label>
-          <button className={styles.aboutPill} onClick={() => navigate("entry")}>ABOUT <span>↗</span></button>
+          <label className={styles.searchBox}><span><Search size={19} aria-hidden="true" /></span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search videos, titles or creators" aria-label="Search videos" /></label>
+          <button className={styles.aboutPill} onClick={() => navigate("entry")}>ABOUT <span><ArrowUpRight size={16} aria-hidden="true" /></span></button>
         </header>
         {screen === "home" ? <main className={styles.home}>
           <section className={styles.statusSection} aria-label="Creator video statuses">
@@ -260,43 +273,44 @@ export default function LeeHubLayoutPreview() {
             <div className={styles.statusViewport}>
               <div className={styles.statusTrack} style={{ transform: `translateX(-${statusOffset * 104}px)` }}>
                 {statuses.map((s,i) => <button key={`${s.creator}-${i}`} className={styles.statusCard} onClick={() => openVideo(s.video)}>
-                  <span className={styles.statusPhoto} style={videoPoster(s.video)}><span>▶</span></span><span>{s.creator}</span>
+                  <span className={styles.statusPhoto} style={videoPoster(s.video)}><span><Play size={22} fill="currentColor" aria-hidden="true" /></span></span><span>{s.creator}</span>
                 </button>)}
               </div>
             </div>
-            <button className={styles.statusNext} onClick={() => setStatusOffset(x => x >= statuses.length - 3 ? 0 : x + 2)} aria-label="See more statuses">→</button>
+            <button className={styles.statusNext} onClick={() => setStatusOffset(x => x >= statuses.length - 3 ? 0 : x + 2)} aria-label="See more statuses"><ArrowRight size={20} aria-hidden="true" /></button>
           </section>
           <div className={styles.filterRow}><span className={styles.sectionLabel}>FILTER</span>{["All", "Premium", "Free", "Film", "Series", "Music", "Documentary", "Lifestyle"].map(f => <button className={filter === f ? styles.activeFilter : ""} key={f} onClick={() => setFilter(f)}>{f}</button>)}</div>
           <section className={styles.library}>
             <div className={styles.apiNotice} role="status" aria-live="polite">
-              {dataMode === "loading" ? "Connecting to local video API…" : dataMode === "live" ? `Live backend connected · ${videos.length} videos` : dataMode === "empty" ? "Connected · No videos published yet" : `Demo content only · ${dataError}`}
+              {dataMode === "loading" ? "Connecting to local video API..." : dataMode === "live" ? `Live backend connected  -  ${videos.length} videos` : dataMode === "empty" ? "Connected  -  No videos published yet" : `Demo content only  -  ${dataError}`}
               {dataMode === "demo" && <button type="button" onClick={() => setReload(n => n + 1)}>Retry</button>}
             </div>
             <div className={styles.sectionHeading}><h2>Explore videos</h2><span>{visibleVideos.length} videos</span></div>
             <div className={styles.firstRow}><div className={styles.videoGrid}>{visibleVideos.slice(0, 4).map(v => <button key={v.id} className={styles.videoCard} onClick={() => openVideo(v)}>
-              <div className={styles.poster} style={videoPoster(v)}><span className={styles.posterPlay}>▶</span><span className={styles.duration}>{v.duration}</span></div>
-              <div className={styles.videoInfo}><strong>{v.title}</strong><span>{v.creator}</span><small>{v.paid ? "PREMIUM" : "FREE"} · {v.tag}</small></div>
+              <div className={styles.poster} style={videoPoster(v)}><span className={styles.posterPlay}><Play size={20} fill="currentColor" aria-hidden="true" /></span><span className={styles.duration}>{v.duration}</span></div>
+              <div className={styles.videoInfo}><strong>{v.title}</strong><span>{v.creator}</span><small>{v.paid ? "PREMIUM" : "FREE"}  -  {v.tag}</small></div>
             </button>)}</div></div>
             <AdvertiserMarquee />
             {visibleVideos.length > 4 && <div className={styles.videoGrid}>{visibleVideos.slice(4).map(v => <button key={v.id} className={styles.videoCard} onClick={() => openVideo(v)}>
-              <div className={styles.poster} style={videoPoster(v)}><span className={styles.posterPlay}>▶</span><span className={styles.duration}>{v.duration}</span></div>
-              <div className={styles.videoInfo}><strong>{v.title}</strong><span>{v.creator}</span><small>{v.paid ? "PREMIUM" : "FREE"} · {v.tag}</small></div>
+              <div className={styles.poster} style={videoPoster(v)}><span className={styles.posterPlay}><Play size={20} fill="currentColor" aria-hidden="true" /></span><span className={styles.duration}>{v.duration}</span></div>
+              <div className={styles.videoInfo}><strong>{v.title}</strong><span>{v.creator}</span><small>{v.paid ? "PREMIUM" : "FREE"}  -  {v.tag}</small></div>
             </button>)}</div>}
             {visibleVideos.length === 0 && <p>No matches. Try another search or filter.</p>}
           </section>
         </main> : <main className={styles.watchLayout}>
           <section className={styles.playerColumn}>
-            <div className={styles.playerWindow} style={videoPoster(selected)}><span className={styles.giantPlay}>▶</span><small>{selected.paid ? "PREMIUM · Secure playback authorization pending" : "VIDEO PLAYER · Existing player integration pending"}</small></div>
-            <div className={styles.watchInfo}><span className={styles.eyebrow}>{selected.tag} / {selected.paid ? "PREMIUM" : "FREE"}</span><h1>{selected.title}</h1><p>By {selected.creator} · {selected.duration}</p><p>{selected.description || "Video metadata loaded. Playback remains disabled until server-side entitlement verification is integrated."}</p></div>
+            <div className={styles.playerWindow} style={videoPoster(selected)}><span className={styles.giantPlay}><Play size={20} fill="currentColor" aria-hidden="true" /></span><small>{selected.paid ? "PREMIUM  -  Secure playback authorization pending" : "VIDEO PLAYER  -  Existing player integration pending"}</small></div>
+            <div className={styles.watchInfo}><span className={styles.eyebrow}>{selected.tag} / {selected.paid ? "PREMIUM" : "FREE"}</span><h1>{selected.title}</h1><p>By {selected.creator}  -  {selected.duration}</p><p>{selected.description || "Video metadata loaded. Playback remains disabled until server-side entitlement verification is integrated."}</p></div>
           </section>
           <aside className={styles.relatedColumn}>
             <h2>Up next</h2>
-            <label className={styles.searchBox}><span>⌕</span><input value={relatedQuery} onChange={e => {setRelatedQuery(e.target.value);setRelatedOffset(0);}} placeholder="Search related videos" aria-label="Search related videos" /></label>
-            <div className={styles.relatedList}>{relatedVideos.slice(relatedOffset, relatedOffset + 4).map(v => <button key={v.id} className={styles.relatedCard} onClick={() => openVideo(v)}><span className={styles.relatedPoster} style={videoPoster(v)}>▶</span><span><strong>{v.title}</strong><small>{v.creator} · {v.duration}</small></span></button>)}</div>
-            <div className={styles.relatedActions}><button onClick={() => setRelatedOffset(x => Math.max(0,x-4))} disabled={relatedOffset===0}>← Previous</button><button onClick={() => setRelatedOffset(x => (x+4 >= relatedVideos.length ? 0 : x+4))}>More related →</button></div>
+            <label className={styles.searchBox}><span><Search size={19} aria-hidden="true" /></span><input value={relatedQuery} onChange={e => {setRelatedQuery(e.target.value);setRelatedOffset(0);}} placeholder="Search related videos" aria-label="Search related videos" /></label>
+            <div className={styles.relatedList}>{relatedVideos.slice(relatedOffset, relatedOffset + 4).map(v => <button key={v.id} className={styles.relatedCard} onClick={() => openVideo(v)}><span className={styles.relatedPoster} style={videoPoster(v)}><Play size={20} fill="currentColor" aria-hidden="true" /></span><span><strong>{v.title}</strong><small>{v.creator}  -  {v.duration}</small></span></button>)}</div>
+            <div className={styles.relatedActions}><button onClick={() => setRelatedOffset(x => Math.max(0,x-4))} disabled={relatedOffset===0}><ChevronLeft size={15} aria-hidden="true" /> Previous</button><button onClick={() => setRelatedOffset(x => (x+4 >= relatedVideos.length ? 0 : x+4))}>More related <ChevronRight size={15} aria-hidden="true" /></button></div>
           </aside>
         </main>}
       </>}
     </div>
   </div>;
 }
+

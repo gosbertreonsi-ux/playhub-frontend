@@ -17,9 +17,10 @@ import {
 } from 'lucide-react';
 
 import LeeHubPrototype from "./layout-preview/page";
+import LeeHubLayout from '../layout-preview/page';
 
 export default function HomePage() {
-  return <LeeHubPrototype />;
+  return <LeeHubLayout />;
 }
 
 // Placeholder thumbnail: self-contained SVG so it never depends on an external host
@@ -1128,4 +1129,7 @@ export default function PlayHubHome() {
       )}
     </div>
   );
+}
+export default function HomePage() {
+  return <LeeHubLayout />;
 }
